@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客戶對談記錄系統</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --accent-color: #3498db;
+            --bg-color: #f4f7f6;
+        }
+        body {
+            font-family: "Microsoft JhengHei", sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h2 { color: var(--primary-color); text-align: center; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+        textarea { height: 120px; resize: vertical; }
+        .btn-group { display: flex; gap: 10px; margin-top: 10px; }
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: 0.3s;
+        }
+        .btn-save { background-color: #27ae60; color: white; }
+        .btn-save:hover { background-color: #219150; }
+        .btn-export { background-color: var(--accent-color); color: white; }
+
+        hr { margin: 30px 0; border: 0; border-top: 1px solid #eee; }
+
+        .search-section { margin-bottom: 20px; }
+        .record-card {
+            background: #fff;
+            border-left: 5px solid var(--accent-color);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        .record-header {
+            display: flex;
+            justify-content: space-between;
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-bottom: 8px;
+        }
+        .record-name { font-weight: bold; color: var(--primary-color); font-size: 1.1em; }
+        .record-content { white-space: pre-wrap; line-height: 1.6; }
+        .delete-btn {
+            color: #e74c3c;
+            cursor: pointer;
+            float: right;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>📝 客戶對談紀錄</h2>
+    
+    <div class="form-group">
+        <label>對談日期</label>
+        <input type="date" id="visitDate">
+    </div>
+    <div class="form-group">
+        <label>客戶姓名</label>
+        <input type="text" id="clientName" placeholder="輸入客戶名稱...">
+    </div>
+    <div class="form-group">
+        <label>對談內容</label>
+        <textarea id="content" placeholder="記錄重點內容、需求或後續追蹤事項..."></textarea>
+    </div>
+    <div class="btn-group">
+        <button class="btn-save" onclick="saveRecord()">儲存紀錄</button>
+        <button class="btn-export" onclick="exportData()">導出備份 (JSON)</button>
+    </div>
+
+    <hr>
+
+    <div class="search-section">
+        <label>快速查詢</label>
+        <input type="text" id="searchInput" oninput="displayRecords()" placeholder="輸入關鍵字搜尋姓名或內容...">
+    </div>
+
+    <div id="recordsList"></div>
+</div>
+
+<script>
+    // 初始化：設定日期為今天 & 讀取資料
+    document.addEventListener('DOMContentLoaded', () => {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('visitDate').value = today;
+        displayRecords();
+    });
+
+    // 儲存資料
+    function saveRecord() {
+        const date = document.getElementById('visitDate').value;
+        const name = document.getElementById('clientName').value.trim();
+        const content = document.getElementById('content').value.trim();
+
+        if (!name || !content) {
+            alert('請填寫客戶姓名與對談內容！');
+            return;
+        }
+
+        const record = {
+            id: Date.now(),
+            date,
+            name,
+            content
+        };
+
+        let records = JSON.parse(localStorage.getItem('client_records') || '[]');
+        records.unshift(record); // 新紀錄排在最前面
+        localStorage.setItem('client_records', JSON.stringify(records));
+
+        // 清空欄位
+        document.getElementById('clientName').value = '';
+        document.getElementById('content').value = '';
+        displayRecords();
+    }
+
+    // 顯示與搜尋資料
+    function displayRecords() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const recordsList = document.getElementById('recordsList');
+        const records = JSON.parse(localStorage.getItem('client_records') || '[]');
+        
+        recordsList.innerHTML = '';
+
+        const filtered = records.filter(r => 
+            r.name.toLowerCase().includes(searchTerm) || 
+            r.content.toLowerCase().includes(searchTerm) ||
+            r.date.includes(searchTerm)
+        );
+
+        filtered.forEach(r => {
+            const card = document.createElement('div');
+            card.className = 'record-card';
+            card.innerHTML = `
+                <div class="record-header">
+                    <span>📅 ${r.date}</span>
+                    <span class="delete-btn" onclick="deleteRecord(${r.id})">刪除</span>
+                </div>
+                <div class="record-name">👤 ${r.name}</div>
+                <div class="record-content">${r.content}</div>
+            `;
+            recordsList.appendChild(card);
+        });
+
+        if (filtered.length === 0) {
+            recordsList.innerHTML = '<p style="text-align:center; color:#999;">查無紀錄</p>';
+        }
+    }
+
+    // 刪除紀錄
+    function deleteRecord(id) {
+        if (!confirm('確定要刪除這筆紀錄嗎？')) return;
+        let records = JSON.parse(localStorage.getItem('client_records') || '[]');
+        records = records.filter(r => r.id !== id);
+        localStorage.setItem('client_records', JSON.stringify(records));
+        displayRecords();
+    }
+
+    // 匯出資料
+    function exportData() {
+        const records = localStorage.getItem('client_records') || '[]';
+        const blob = new Blob([records], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `backup_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+    }
+</script>
+
+</body>
+</html>
