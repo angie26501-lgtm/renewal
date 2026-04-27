@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>馥芸AI導演Prompt生成器</title>
+
+<style>
+body{
+  font-family: -apple-system, BlinkMacSystemFont;
+  background:#f5f7f6;
+  margin:0;
+  color:#333;
+}
+
+.container{
+  max-width:900px;
+  margin:auto;
+  padding:20px;
+}
+
+h1{
+  text-align:center;
+  color:#1f5b43;
+}
+
+.card{
+  background:white;
+  border-radius:15px;
+  padding:20px;
+  margin-bottom:20px;
+  box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
+
+textarea, input{
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ccc;
+  margin-top:10px;
+}
+
+button{
+  background:#1f5b43;
+  color:white;
+  border:none;
+  padding:12px;
+  border-radius:10px;
+  width:100%;
+  margin-top:10px;
+  font-size:16px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#16392e;
+}
+
+.copy-btn{
+  background:#c8a94b;
+}
+
+.output{
+  white-space:pre-wrap;
+  background:#f8f8f8;
+  padding:15px;
+  border-radius:10px;
+  margin-top:10px;
+  font-size:14px;
+}
+
+.small{
+  font-size:12px;
+  color:#888;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎬 馥芸AI導演 Prompt生成器</h1>
+
+<div class="card">
+<h3>🎤 描述畫面 / 上傳圖片說明</h3>
+<textarea id="inputText" placeholder="例：女生在咖啡廳用筆電工作"></textarea>
+
+<button onclick="startVoice()">🎤 語音輸入</button>
+<button onclick="generatePrompt()">✨ 生成 Prompt</button>
+
+<p class="small">支援語音 / 手動輸入</p>
+</div>
+
+<div class="card">
+<h3>✍️ 英文短影音 Prompt</h3>
+<div id="output1" class="output"></div>
+<button class="copy-btn" onclick="copyText('output1')">📋 複製</button>
+</div>
+
+<div class="card">
+<h3>🧠 Gemini Imagen 進階 Prompt</h3>
+<div id="output2" class="output"></div>
+<button class="copy-btn" onclick="copyText('output2')">📋 複製</button>
+</div>
+
+</div>
+
+<script>
+
+// 本機暫存
+window.onload = function(){
+  const saved = localStorage.getItem("promptInput");
+  if(saved){
+    document.getElementById("inputText").value = saved;
+  }
+}
+
+// 語音輸入
+function startVoice(){
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = "zh-TW";
+  recognition.start();
+
+  recognition.onresult = function(event){
+    document.getElementById("inputText").value = event.results[0][0].transcript;
+  }
+}
+
+// 生成 Prompt
+function generatePrompt(){
+
+  let input = document.getElementById("inputText").value;
+  localStorage.setItem("promptInput", input);
+
+  if(!input){
+    alert("請輸入描述");
+    return;
+  }
+
+  let englishPrompt = `
+Cinematic short video, ${input},
+soft cinematic scene,
+slow push-in camera movement,
+warm natural lighting,
+premium commercial atmosphere,
+black, gold and herbal green color palette,
+ultra realistic details, depth of field,
+4K, 24fps, no text, no watermark
+`;
+
+  let imagenPrompt = `
+${input}
+
+Scene:
+A cinematic environment with premium composition and clean background.
+
+Composition:
+Rule of thirds, subject slightly off center, shallow depth of field.
+
+Camera:
+Slow push-in shot, smooth cinematic movement.
+
+Lighting:
+Soft natural lighting with warm highlights.
+
+Mood:
+Warm, professional, calm and premium.
+
+Color:
+Black, gold, herbal green tones.
+
+Style:
+Cinematic, commercial, editorial.
+
+Negative prompt:
+text, watermark, distortion, bad anatomy
+`;
+
+  document.getElementById("output1").innerText = englishPrompt;
+  document.getElementById("output2").innerText = imagenPrompt;
+}
+
+// 複製
+function copyText(id){
+  let text = document.getElementById(id).innerText;
+  navigator.clipboard.writeText(text);
+  alert("已複製！");
+}
+
+</script>
+
+</body>
+</html>
