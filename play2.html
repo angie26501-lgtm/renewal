@@ -1,18 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
-<head><label class="upload-box">
-  📷 上傳圖片
-  <input type="file" id="imageUpload" accept="image/*">
-</label>
-
-<div id="previewArea" style="margin-top:12px;"></div>
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>馥芸AI導演Prompt生成器</title>
 
 <style>
 body{
-  font-family: -apple-system, BlinkMacSystemFont;
+  font-family:-apple-system, BlinkMacSystemFont;
   background:#f5f7f6;
   margin:0;
   color:#333;
@@ -37,7 +32,7 @@ h1{
   box-shadow:0 5px 15px rgba(0,0,0,0.05);
 }
 
-textarea, input{
+textarea{
   width:100%;
   padding:12px;
   border-radius:10px;
@@ -65,6 +60,14 @@ button:hover{
   background:#c8a94b;
 }
 
+.danger-btn{
+  background:#b94a48;
+}
+
+.secondary-btn{
+  background:#888;
+}
+
 .output{
   white-space:pre-wrap;
   background:#f8f8f8;
@@ -78,6 +81,30 @@ button:hover{
   font-size:12px;
   color:#888;
 }
+
+/* 上傳區 */
+.upload-box{
+  display:block;
+  background:#f3f6f5;
+  border:2px dashed #1f5b43;
+  border-radius:12px;
+  padding:16px;
+  text-align:center;
+  cursor:pointer;
+  color:#1f5b43;
+  font-weight:bold;
+  margin-top:12px;
+}
+
+.upload-box input{
+  display:none;
+}
+
+#previewArea img{
+  max-width:100%;
+  border-radius:12px;
+  margin-top:10px;
+}
 </style>
 </head>
 
@@ -88,32 +115,47 @@ button:hover{
 <h1>🎬 馥芸AI導演 Prompt生成器</h1>
 
 <div class="card">
-<h3>🎤 描述畫面 / 上傳圖片說明</h3>
+<h3>🎤 描述畫面 / 上傳圖片</h3>
+
 <textarea id="inputText" placeholder="例：女生在咖啡廳用筆電工作"></textarea>
+
+<label class="upload-box">
+📷 點擊上傳圖片
+<input type="file" id="imageUpload" accept="image/*">
+</label>
+
+<div id="previewArea"></div>
 
 <button onclick="startVoice()">🎤 語音輸入</button>
 <button onclick="generatePrompt()">✨ 生成 Prompt</button>
 
-<p class="small">支援語音 / 手動輸入</p>
+<button class="secondary-btn" onclick="clearText()">🧹 清除文字</button>
+<button class="danger-btn" onclick="clearImage()">🗑 清除圖片</button>
+
+<p class="small">支援語音 / 手動輸入 / 圖片預覽</p>
 </div>
 
 <div class="card">
 <h3>✍️ 英文短影音 Prompt</h3>
 <div id="output1" class="output"></div>
-<button class="copy-btn" onclick="copyText('output1')">📋 複製</button>
+<button class="copy-btn" onclick="copyText('output1')">📋 複製英文</button>
 </div>
 
 <div class="card">
 <h3>🧠 Gemini Imagen 進階 Prompt</h3>
 <div id="output2" class="output"></div>
-<button class="copy-btn" onclick="copyText('output2')">📋 複製</button>
+<button class="copy-btn" onclick="copyText('output2')">📋 複製Imagen</button>
+</div>
+
+<div class="card">
+<button class="copy-btn" onclick="copyAll()">🚀 一鍵複製全部 Prompt</button>
 </div>
 
 </div>
 
 <script>
 
-// 本機暫存
+// ===== 本機暫存 =====
 window.onload = function(){
   const saved = localStorage.getItem("promptInput");
   if(saved){
@@ -121,7 +163,26 @@ window.onload = function(){
   }
 }
 
-// 語音輸入
+// ===== 圖片上傳 =====
+let uploadedImageBase64 = "";
+
+document.getElementById("imageUpload").addEventListener("change", function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+
+  reader.onload = function(event){
+    uploadedImageBase64 = event.target.result;
+
+    document.getElementById("previewArea").innerHTML =
+      `<img src="${uploadedImageBase64}">`;
+  };
+
+  reader.readAsDataURL(file);
+});
+
+// ===== 語音輸入 =====
 function startVoice(){
   const recognition = new webkitSpeechRecognition();
   recognition.lang = "zh-TW";
@@ -132,7 +193,7 @@ function startVoice(){
   }
 }
 
-// 生成 Prompt
+// ===== 生成 Prompt =====
 function generatePrompt(){
 
   let input = document.getElementById("inputText").value;
@@ -143,8 +204,11 @@ function generatePrompt(){
     return;
   }
 
+  let imageNote = uploadedImageBase64 ? "Use provided image as reference." : "";
+
   let englishPrompt = `
 Cinematic short video, ${input},
+${imageNote}
 soft cinematic scene,
 slow push-in camera movement,
 warm natural lighting,
@@ -156,6 +220,8 @@ ultra realistic details, depth of field,
 
   let imagenPrompt = `
 ${input}
+
+${imageNote}
 
 Scene:
 A cinematic environment with premium composition and clean background.
@@ -186,11 +252,35 @@ text, watermark, distortion, bad anatomy
   document.getElementById("output2").innerText = imagenPrompt;
 }
 
-// 複製
+// ===== 複製 =====
 function copyText(id){
   let text = document.getElementById(id).innerText;
   navigator.clipboard.writeText(text);
   alert("已複製！");
+}
+
+// ===== 一鍵複製全部 =====
+function copyAll(){
+  let text1 = document.getElementById("output1").innerText;
+  let text2 = document.getElementById("output2").innerText;
+
+  let combined = text1 + "\n\n----------------------\n\n" + text2;
+
+  navigator.clipboard.writeText(combined);
+  alert("全部已複製！");
+}
+
+// ===== 清除文字 =====
+function clearText(){
+  document.getElementById("inputText").value = "";
+  localStorage.removeItem("promptInput");
+}
+
+// ===== 清除圖片 =====
+function clearImage(){
+  uploadedImageBase64 = "";
+  document.getElementById("previewArea").innerHTML = "";
+  document.getElementById("imageUpload").value = "";
 }
 
 </script>
