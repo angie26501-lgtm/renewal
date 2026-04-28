@@ -3,14 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>馥芸AI導演Prompt生成器</title>
+<title>馥芸AI圖生圖指示詞生成器</title>
 
 <style>
 body{
-  font-family:-apple-system, BlinkMacSystemFont;
+  font-family:-apple-system;
   background:#f5f7f6;
   margin:0;
-  color:#333;
 }
 
 .container{
@@ -29,7 +28,6 @@ h1{
   border-radius:15px;
   padding:20px;
   margin-bottom:20px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.05);
 }
 
 textarea{
@@ -37,7 +35,6 @@ textarea{
   padding:12px;
   border-radius:10px;
   border:1px solid #ccc;
-  margin-top:10px;
 }
 
 button{
@@ -48,59 +45,13 @@ button{
   border-radius:10px;
   width:100%;
   margin-top:10px;
-  font-size:16px;
   cursor:pointer;
-}
-
-button:hover{
-  background:#16392e;
 }
 
 .copy-btn{
   background:#c8a94b;
 }
 
-.danger-btn{
-  background:#b94a48;
-}
-
-.secondary-btn{
-  background:#888;
-}
-
-.output{
-  white-space:pre-wrap;
-  background:#f8f8f8;
-  padding:15px;
-  border-radius:10px;
-  margin-top:10px;
-  font-size:14px;
-}
-
-.small{
-  font-size:12px;
-  color:#888;
-}
-
-/* 上傳區 */
-.upload-box{
-  display:block;
-  background:#f3f6f5;
-  border:2px dashed #1f5b43;
-  border-radius:12px;
-  padding:16px;
-  text-align:center;
-  cursor:pointer;
-  color:#1f5b43;
-  font-weight:bold;
-  margin-top:12px;
-}
-
-.upload-box input{
-  display:none;
-}
-
-/* 多圖預覽 */
 #previewArea{
   display:grid;
   grid-template-columns: repeat(auto-fill, minmax(100px,1fr));
@@ -114,6 +65,14 @@ button:hover{
   object-fit:cover;
   border-radius:10px;
 }
+
+.output{
+  white-space:pre-wrap;
+  background:#f8f8f8;
+  padding:15px;
+  border-radius:10px;
+  margin-top:10px;
+}
 </style>
 </head>
 
@@ -121,184 +80,134 @@ button:hover{
 
 <div class="container">
 
-<h1>🎬 馥芸AI導演 Prompt生成器</h1>
+<h1>🎬 AI照片→指示詞生成器</h1>
 
 <div class="card">
-<h3>🎤 描述畫面 / 上傳圖片</h3>
 
-<textarea id="inputText" placeholder="例：女生在咖啡廳用筆電工作"></textarea>
+<textarea id="inputText" placeholder="補充描述（可選）：例如 溫暖、高級感、療癒風"></textarea>
 
-<label class="upload-box">
-📷 點擊上傳圖片（可多選）
-<input type="file" id="imageUpload" accept="image/*" multiple>
+<label style="display:block;margin-top:10px;border:2px dashed #1f5b43;padding:15px;text-align:center;border-radius:10px;">
+📷 上傳情境 / 主題照片（可多張）
+<input type="file" id="imageUpload" accept="image/*" multiple hidden>
 </label>
 
 <div id="previewArea"></div>
 
-<button onclick="startVoice()">🎤 語音輸入</button>
-<button onclick="generatePrompt()">✨ 生成 Prompt</button>
+<button onclick="generatePrompt()">✨ 生成圖生圖指示詞</button>
+<button onclick="clearImage()">🗑 清除圖片</button>
 
-<button class="secondary-btn" onclick="clearText()">🧹 清除文字</button>
-<button class="danger-btn" onclick="clearImage()">🗑 清除圖片</button>
-
-<p class="small">支援語音 / 手動輸入 / 多圖預覽</p>
 </div>
 
 <div class="card">
-<h3>✍️ 英文短影音 Prompt</h3>
-<div id="output1" class="output"></div>
-<button class="copy-btn" onclick="copyText('output1')">📋 複製英文</button>
-</div>
-
-<div class="card">
-<h3>🧠 Gemini Imagen 進階 Prompt</h3>
-<div id="output2" class="output"></div>
-<button class="copy-btn" onclick="copyText('output2')">📋 複製Imagen</button>
-</div>
-
-<div class="card">
-<button class="copy-btn" onclick="copyAll()">🚀 一鍵複製全部 Prompt</button>
+<h3>🎯 圖生圖 Prompt（可直接用）</h3>
+<div id="output" class="output"></div>
+<button class="copy-btn" onclick="copyText()">📋 一鍵複製</button>
 </div>
 
 </div>
 
 <script>
 
-// ===== 本機暫存 =====
-window.onload = function(){
-  const saved = localStorage.getItem("promptInput");
-  if(saved){
-    document.getElementById("inputText").value = saved;
-  }
-}
-
-// ===== 多圖片上傳 =====
 let uploadedImages = [];
 
+// ===== 上傳（可累加）=====
 document.getElementById("imageUpload").addEventListener("change", function(e){
 
   const files = Array.from(e.target.files);
 
-  if(files.length === 0) return;
-
-  uploadedImages = [];
-  document.getElementById("previewArea").innerHTML = "";
-
-  files.forEach(file => {
-
+  files.forEach(file=>{
     const reader = new FileReader();
 
     reader.onload = function(event){
-
       uploadedImages.push(event.target.result);
-
-      document.getElementById("previewArea").innerHTML +=
-        `<img src="${event.target.result}">`;
-
+      renderImages();
     };
 
     reader.readAsDataURL(file);
   });
 
+  e.target.value = "";
 });
 
-// ===== 語音輸入 =====
-function startVoice(){
-  const recognition = new webkitSpeechRecognition();
-  recognition.lang = "zh-TW";
-  recognition.start();
 
-  recognition.onresult = function(event){
-    document.getElementById("inputText").value = event.results[0][0].transcript;
-  }
+// ===== 顯示圖片 =====
+function renderImages(){
+  const area = document.getElementById("previewArea");
+  area.innerHTML = "";
+
+  uploadedImages.forEach((img,index)=>{
+    area.innerHTML += `
+      <div style="position:relative">
+        <img src="${img}">
+        <button onclick="removeImage(${index})"
+        style="position:absolute;top:5px;right:5px;background:red;color:white;border:none;border-radius:50%;width:20px;height:20px;">×</button>
+      </div>
+    `;
+  });
 }
 
-// ===== 生成 Prompt =====
+function removeImage(index){
+  uploadedImages.splice(index,1);
+  renderImages();
+}
+
+
+// ===== 生成指示詞（核心升級）=====
 function generatePrompt(){
 
-  let input = document.getElementById("inputText").value;
-  localStorage.setItem("promptInput", input);
+  let styleText = document.getElementById("inputText").value;
 
-  if(!input){
-    alert("請輸入描述");
+  if(uploadedImages.length === 0){
+    alert("請上傳至少一張圖片");
     return;
   }
 
-  let imageNote = uploadedImages.length > 0 
-    ? `Use ${uploadedImages.length} reference images.` 
-    : "";
+  let prompt = `
+Use the uploaded images as visual reference.
 
-  let englishPrompt = `
-Cinematic short video, ${input},
-${imageNote}
-soft cinematic scene,
-slow push-in camera movement,
-warm natural lighting,
-premium commercial atmosphere,
-black, gold and herbal green color palette,
-ultra realistic details, depth of field,
-4K, 24fps, no text, no watermark
-`;
+Reference structure:
+- Image 1: main subject or concept
+- Image 2+: environment, lighting, or style inspiration
 
-  let imagenPrompt = `
-${input}
+Generate a high-end cinematic image based on these references.
 
-${imageNote}
+Style direction:
+${styleText || "cinematic, premium, clean composition"}
 
 Scene:
-A cinematic environment with premium composition and clean background.
-
-Composition:
-Rule of thirds, subject slightly off center, shallow depth of field.
-
-Camera:
-Slow push-in shot, smooth cinematic movement.
+coherent environment, professional composition
 
 Lighting:
-Soft natural lighting with warm highlights.
+soft natural lighting, depth, realistic shadows
+
+Camera:
+cinematic framing, shallow depth of field
 
 Mood:
-Warm, professional, calm and premium.
+warm, elegant, modern
 
 Color:
-Black, gold, herbal green tones.
+black, gold, herbal green tones
 
-Style:
-Cinematic, commercial, editorial.
+Quality:
+ultra realistic, high detail, 4K
 
 Negative prompt:
-text, watermark, distortion, bad anatomy
+text, watermark, distortion, low quality
 `;
 
-  document.getElementById("output1").innerText = englishPrompt;
-  document.getElementById("output2").innerText = imagenPrompt;
+  document.getElementById("output").innerText = prompt;
 }
 
+
 // ===== 複製 =====
-function copyText(id){
-  let text = document.getElementById(id).innerText;
+function copyText(){
+  let text = document.getElementById("output").innerText;
   navigator.clipboard.writeText(text);
   alert("已複製！");
 }
 
-// ===== 一鍵複製 =====
-function copyAll(){
-  let text1 = document.getElementById("output1").innerText;
-  let text2 = document.getElementById("output2").innerText;
-
-  let combined = text1 + "\n\n----------------------\n\n" + text2;
-
-  navigator.clipboard.writeText(combined);
-  alert("全部已複製！");
-}
-
-// ===== 清除文字 =====
-function clearText(){
-  document.getElementById("inputText").value = "";
-  localStorage.removeItem("promptInput");
-}
-
-// ===== 清除圖片 =====
+// ===== 清除 =====
 function clearImage(){
   uploadedImages = [];
   document.getElementById("previewArea").innerHTML = "";
