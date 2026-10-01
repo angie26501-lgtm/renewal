@@ -1,1 +1,253 @@
+<!DOCTYPE html><html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>保費繳款通知｜財顧芸</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet"><style>
+:root{--cream:#F6F2E9;--paper:#FFFDF7;--ink:#26302A;--ink-soft:#54615A;
+--sage-900:#2F4438;--sage-700:#456051;--sage-500:#7C9686;--sage-200:#CCD9CE;--sage-050:#E9EFE9;
+--clay:#BE5F3E;--clay-soft:#F3E2DA;--amber:#B8862F;--amber-soft:#F6EBD4;--rule:#DED7C6;
+--r:14px;--shadow:0 1px 2px rgba(38,48,42,.06),0 8px 24px -12px rgba(38,48,42,.18);}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);
+font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+font-size:16.5px;line-height:1.8;letter-spacing:.01em;-webkit-font-smoothing:antialiased}
+.wrap{max-width:700px;margin:0 auto;padding:0 18px 80px}
+h1,h2,h3,h4{font-family:"Noto Serif TC","Songti TC",serif;font-weight:700;letter-spacing:.02em;line-height:1.45;margin:0}
+.hero{background:var(--sage-900);color:#F2F0E6;padding:34px 0 28px;position:relative;overflow:hidden}
+.hero:after{content:"";position:absolute;inset:auto 0 0 0;height:1px;background:linear-gradient(90deg,transparent,var(--clay),transparent)}
+.hero .wrap{max-width:700px}
+.eyebrow{font-size:11.5px;letter-spacing:.26em;color:var(--sage-200);margin:0 0 11px}
+.hero h1{font-size:26px;color:#FBF8EF}
+.hero .sub{margin:12px 0 0;color:#C6D3C7;font-size:14px;line-height:1.9}
+section{margin-top:30px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.2em;color:var(--sage-700);
+border-bottom:1.5px solid var(--clay);padding-bottom:5px;margin-bottom:13px}
+h2{font-size:20px;margin-bottom:6px}
+.lede{color:var(--ink-soft);font-size:14px;margin:6px 0 16px;line-height:1.85}
 
+.amt{background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);
+padding:22px 22px 20px;box-shadow:var(--shadow);text-align:center}
+.amt .l{font-size:12px;letter-spacing:.16em;color:var(--ink-soft)}
+.amt .n{font-family:"Noto Serif TC",serif;font-size:46px;color:var(--clay);line-height:1.1;
+margin:6px 0 2px;font-variant-numeric:tabular-nums}
+.amt .u{font-size:13px;color:var(--ink-soft)}
+.amt .meta{margin-top:16px;padding-top:14px;border-top:1px dashed var(--sage-200);
+display:grid;gap:7px;font-size:13.5px;text-align:left}
+.amt .meta div{display:flex;gap:10px}
+.amt .meta span{color:var(--ink-soft);flex:none;min-width:84px}
+.amt .meta b{font-weight:500;color:var(--sage-900);word-break:break-all}
+.due{margin-top:13px;background:var(--amber-soft);border:1px solid #E5D3AA;border-radius:11px;
+padding:12px 15px;font-size:13.5px;color:#6B4F14;line-height:1.8;text-align:center}
+.due b{color:#5C440F}
+
+.qrbox{background:var(--paper);border:2px solid var(--clay);border-radius:var(--r);
+padding:22px;box-shadow:var(--shadow);text-align:center;margin-top:16px}
+.qrbox .w{display:inline-block;font-size:11px;letter-spacing:.14em;padding:3px 12px;border-radius:99px;
+background:var(--clay);color:#FFF3ED;margin-bottom:13px}
+.qrbox img{width:200px;height:200px;display:block;margin:0 auto;border:8px solid #fff;border-radius:10px}
+.qrbox .link{margin-top:13px;font-size:13.5px;word-break:break-all}
+.qrbox .link a{color:var(--sage-700)}
+.qrbox .go{display:inline-block;margin-top:12px;padding:12px 26px;border-radius:11px;
+background:var(--sage-900);color:#FBF8EF;text-decoration:none;font-size:15px;font-weight:500}
+
+.sp{display:flex;gap:13px;padding:14px 0;border-bottom:1px dashed var(--sage-200);align-items:flex-start}
+.sp:last-child{border-bottom:0}
+.sp .n{flex:none;width:27px;height:27px;border-radius:50%;background:var(--clay);color:#FFF3ED;
+display:flex;align-items:center;justify-content:center;font-family:"Noto Serif TC",serif;font-size:14px;margin-top:2px}
+.sp h4{font-size:15.5px;color:var(--sage-900);margin-bottom:3px}
+.sp p{margin:0;font-size:14px;color:var(--ink-soft);line-height:1.85}
+.sp p b{color:var(--sage-900);font-weight:500}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);
+padding:18px 20px;box-shadow:var(--shadow)}
+
+.alt{background:var(--sage-050);border:1px solid var(--sage-200);border-radius:12px;
+padding:16px 18px;margin-top:12px}
+.alt h4{font-size:14.5px;color:var(--sage-900);margin-bottom:7px;font-family:"Noto Serif TC",serif}
+.alt p{margin:0;font-size:13.5px;color:var(--sage-700);line-height:1.85}
+.alt p+p{margin-top:6px}
+.alt b{color:var(--sage-900)}
+
+.last{background:var(--sage-900);color:#E7EDE6;border-radius:var(--r);padding:20px 22px;margin-top:16px}
+.last h4{font-family:"Noto Serif TC",serif;font-size:18px;color:#FBF8EF;margin-bottom:9px}
+.last p{margin:0 0 8px;font-size:14px;color:#BCCCBD;line-height:1.9}
+.last p:last-child{margin-bottom:0}
+.last strong{color:#F2D9C9}
+
+.advisor{margin-top:34px;background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);
+padding:20px 22px;box-shadow:var(--shadow)}
+.advisor .adv-label{font-size:10.5px;letter-spacing:.22em;color:var(--sage-500);margin:0 0 9px}
+.advisor .nm{font-family:"Noto Serif TC",serif;font-size:18px;color:var(--sage-900)}
+.advisor .rl{font-size:13px;color:var(--ink-soft);margin-top:5px;line-height:1.85}
+.advisor .rl strong{color:var(--sage-900);font-weight:500}
+.foot{margin-top:18px;font-size:11.5px;color:#8B958E;line-height:1.9}
+
+.ed{border-bottom:1px dashed var(--sage-500);padding:0 3px;outline:none;min-width:40px;display:inline-block}
+.ed:focus{background:#FFFBEF;border-bottom-color:var(--clay)}
+.tip{margin-top:14px;background:var(--clay-soft);border:1px solid #E3BFAE;border-radius:11px;
+padding:12px 15px;font-size:12.5px;color:#8A4429;line-height:1.8}
+.tip b{color:#7A3A21}
+
+.printbar{position:fixed;right:18px;bottom:18px;z-index:40;display:flex;flex-direction:column;gap:8px}
+.printbar .pb{padding:11px 17px;border:1px solid var(--rule);border-radius:11px;background:var(--paper);
+font:inherit;font-size:13.5px;color:var(--sage-700);cursor:pointer;box-shadow:0 3px 14px rgba(38,48,42,.16);
+white-space:nowrap;transition:all .15s}
+.printbar .pb:hover{border-color:var(--sage-500);background:#fff}
+.printbar .pb.main{background:var(--sage-900);border-color:var(--sage-900);color:#FBF8EF;font-weight:500}
+@media(max-width:520px){.printbar{right:12px;bottom:12px}.printbar .pb{padding:10px 14px;font-size:12.5px}}
+
+@page{size:A4 portrait;margin:14mm 13mm}
+@media print{
+*{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
+.printbar,.tip{display:none!important}
+html,body{background:#fff}
+body{font-size:10.5pt;line-height:1.7}
+.wrap{max-width:100%;padding:0}
+.hero{padding:0 0 11pt}.hero h1{font-size:19pt}.hero .sub{font-size:9pt}
+section{margin-top:14pt}h2{font-size:13.5pt}.lede{font-size:9pt}.tag{font-size:8pt}
+.amt,.qrbox,.card,.alt,.last,.advisor,.sp{break-inside:avoid;page-break-inside:avoid}
+.amt{padding:13pt;box-shadow:none}.amt .n{font-size:30pt}
+.qrbox{padding:13pt;box-shadow:none}.qrbox img{width:150px;height:150px}.qrbox .go{display:none}
+.card{box-shadow:none;padding:12pt 14pt}
+.sp h4{font-size:11pt}.sp p{font-size:9pt}
+.alt,.last{padding:11pt 13pt}.last h4{font-size:12.5pt}.last p{font-size:9pt}
+.advisor{box-shadow:none;padding:12pt}.foot{font-size:7.5pt}
+body.ink .hero,body.ink .last{background:#fff!important;color:#000!important}
+body.ink .hero{border-bottom:1.5pt solid #333}
+body.ink .hero h1,body.ink .hero .sub,body.ink .eyebrow{color:#000!important}
+body.ink .last{border:1pt solid #999}
+body.ink .last h4,body.ink .last p,body.ink .last strong{color:#000!important}
+body.ink .amt .n{color:#000!important}
+body.ink .due,body.ink .alt{background:#f6f6f6!important;color:#000!important}
+body.ink .sp .n,body.ink .qrbox .w{background:#555!important}
+}
+</style></head><body>
+
+<header class="hero"><div class="wrap">
+<p class="eyebrow">財顧芸 ｜ 住宅財產風險</p>
+<h1 id="h1">保費繳款通知</h1>
+<p class="sub">保單已完成投保，接下來只剩繳費這一步。<br>掃下方 QR Code 就能線上完成，大約兩分鐘。</p>
+</div></header>
+
+<main class="wrap">
+
+<section>
+<span class="tag">應繳資訊</span>
+<h2>這一筆要繳多少</h2>
+<div class="amt">
+<div class="l">應 繳 保 險 費</div>
+<div class="n">NT$ <span id="amt">—</span></div>
+<div class="u" id="plan">住宅火災及地震基本保險　一年期</div>
+<div class="meta">
+<div><span>承保公司</span><b id="co">國泰世紀產物保險</b></div>
+<div><span>銷帳編號</span><b id="acc">—</b></div>
+<div><span>繳費期限</span><b id="due">—</b></div>
+</div>
+</div>
+<div class="due" id="cd">請於期限前完成繳費</div>
+</section>
+
+<section>
+<span class="tag">最快的方式</span>
+<h2>掃碼線上繳費</h2>
+<p class="lede">支援信用卡、網路銀行、行動支付，不用出門，大約兩分鐘。</p>
+<div class="qrbox">
+<span class="w">掃 我 繳 費</span>
+<img src="data:image/png;base64,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" alt="國泰產險線上繳費 QR Code">
+<p class="link">或直接輸入網址<br><a href="https://smartpay.cathay-ins.com.tw" target="_blank" rel="noopener">https://smartpay.cathay-ins.com.tw</a></p>
+<a class="go" href="https://smartpay.cathay-ins.com.tw" target="_blank" rel="noopener">用手機開啟繳費頁</a>
+</div>
+
+<div class="card" style="margin-top:16px">
+<div class="sp"><div class="n">1</div><div>
+<h4>掃上面的 QR Code</h4>
+<p>用手機相機或 LINE 的掃描功能都可以，會直接進到國泰產險的繳費頁。</p></div></div>
+<div class="sp"><div class="n">2</div><div>
+<h4>身分資訊：點「個人」</h4>
+<p>接著填<b>要保人的姓名</b>與<b>身分證字號</b>（保單上的本人）。</p></div></div>
+<div class="sp"><div class="n">3</div><div>
+<h4>認證資訊：選「生日」或「銷帳編號」</h4>
+<p>選<b>生日</b>就填要保人出生年月日；選<b>銷帳編號</b>就填 <b id="acc2">—</b>（不用空格）。兩個擇一即可。</p></div></div>
+<div class="sp"><div class="n">4</div><div>
+<h4>輸入圖片上的驗證碼</h4>
+<p>四位數字，看不清楚可以按旁邊的箭頭換一組。</p></div></div>
+<div class="sp"><div class="n">5</div><div>
+<h4>確認金額 → 選付款方式 → 完成</h4>
+<p>畫面會帶出應繳 <b id="amt2">—</b> 元，確認後選信用卡、網銀或行動支付，依指示完成。</p></div></div>
+<div class="sp"><div class="n">6</div><div>
+<h4>截圖，傳給我</h4>
+<p>最後「完成」那一頁請<b>截圖傳到 LINE 給我</b>，我會幫您確認入帳，保單後續文件我再提供給您。</p></div></div>
+</div>
+</section>
+
+<section>
+<span class="tag">其他方式</span>
+<h2>不想線上繳也可以</h2>
+
+<div class="alt">
+<h4>一、超商繳費</h4>
+<p>帶著<b>繳費單</b>到 7-ELEVEN、全家、OK、萊爾富或農會，給店員掃單上的條碼就好。</p>
+</div>
+
+<div class="alt">
+<h4>二、ATM 轉帳</h4>
+<p>國泰世華 ATM：插卡 → 繳費稅／儲值 → QR Code 繳費 → 掃<b>繳費單上的 QR Code</b> → 確認金額後送出，免手續費。</p>
+<p>其他銀行轉帳：請依<b>繳費單上的代理行銷帳號碼</b>轉入，金額 <b id="amt3">—</b> 元；他行轉帳手續費 15 元由本人負擔。</p>
+</div>
+
+<div class="alt">
+<h4>三、臨櫃或託收</h4>
+<p>可持繳費單至代收銀行臨櫃辦理。如果操作上有任何不順，<b>直接打給我，我陪您一起處理</b>。</p>
+</div>
+</section>
+
+<section>
+<div class="last">
+<h4>繳完就告一段落了</h4>
+<p>這次從四家詢價、逐條核對到確認內容，就是為了讓這張保單真的保到該保的地方。</p>
+<p><strong>完成後記得截圖給我</strong>——我確認入帳後，會把保單文件與明年的續保提醒一併幫您記下來，到時候我主動通知，您不用惦記著。</p>
+</div>
+</section>
+
+<div class="advisor"><p class="adv-label">您的顧問</p>
+<div class="nm">陳芸琪　Angie Chen</div>
+<div class="rl"><strong>財顧芸｜宜蘭在地家族生活顧問</strong><br>繳費或保單有任何問題，隨時 LINE 我。</div></div>
+
+
+<p class="foot">本頁僅供繳費說明使用，實際應繳金額、銷帳編號與繳費期限以國泰世紀產物保險公司寄發之繳費單為準。<br>繳費後保險效力之起訖，依保險單條款及保險公司規定辦理。</p>
+
+</main>
+
+<div class="printbar" id="pbar">
+<button class="pb main" id="pcolor">列印 A4</button>
+<button class="pb" id="pink">省墨列印</button>
+</div>
+
+<script>
+(function(){
+function q(k,d){try{var v=new URLSearchParams(location.search).get(k);return (v===null||v==='')?d:v;}catch(x){return d;}}
+function money(v){var n=String(v).replace(/[^\d]/g,'');if(!n)return '';return parseInt(n,10).toLocaleString('en-US');}
+function group(v){var n=String(v).replace(/\s/g,'');return n.replace(/(.{4})/g,'$1 ').trim();}
+var amt=money(q('a','')), acc=q('n',''), due=q('d',''), co=q('c','國泰世紀產物保險'),
+    plan=q('p','住宅火災及地震基本保險　一年期'), title=q('t','保費繳款通知');
+document.title=title+'｜財顧芸';
+document.getElementById('h1').textContent=title;
+document.getElementById('plan').textContent=plan;
+document.getElementById('co').textContent=co;
+document.getElementById('amt').textContent=amt||'—';
+['amt2','amt3'].forEach(function(id){document.getElementById(id).textContent=amt||'—';});
+document.getElementById('acc').textContent=acc?group(acc):'請見繳費單';
+document.getElementById('acc2').textContent=acc?group(acc):'繳費單上的銷帳編號';
+var dd=null;
+if(/^\d{4}-\d{2}-\d{2}$/.test(due)){var p=due.split('-').map(Number);dd=new Date(p[0],p[1]-1,p[2],23,59,59);
+  document.getElementById('due').textContent='民國 '+(p[0]-1911)+' 年 '+p[1]+' 月 '+p[2]+' 日 24:00';}
+else{document.getElementById('due').textContent=due||'請見繳費單';}
+var box=document.getElementById('cd');
+if(dd){var n=Math.ceil((dd-new Date())/864e5);
+  if(n>1)box.innerHTML='距離繳費期限還有 <b>'+n+' 天</b>　（'+document.getElementById('due').textContent+'）';
+  else if(n===1)box.innerHTML='<b>明天就是繳費期限了</b>，今天完成最保險。';
+  else if(n===0)box.innerHTML='<b>今天是繳費期限最後一天</b>。';
+  else box.innerHTML='繳費期限已過，<b>請直接聯絡我</b>，我幫您處理。';}
+else{box.textContent='請於繳費單上的期限前完成繳費';}
+function doPrint(ink){if(ink)document.body.classList.add('ink');window.print();}
+window.addEventListener('afterprint',function(){document.body.classList.remove('ink');});
+document.getElementById('pcolor').addEventListener('click',function(){doPrint(false);});
+document.getElementById('pink').addEventListener('click',function(){doPrint(true);});
+})();
+</script>
+</body></html>
