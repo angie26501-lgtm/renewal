@@ -1,0 +1,211 @@
+<!DOCTYPE html><html lang="zh-Hant-TW"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>通知頁產生器｜財顧芸</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Noto+Serif+TC:wght@500;700&display=swap" rel="stylesheet"><style>
+:root{--cream:#F6F2E9;--paper:#FFFDF7;--ink:#26302A;--ink-soft:#54615A;
+--sage-900:#2F4438;--sage-700:#456051;--sage-500:#7C9686;--sage-200:#CCD9CE;--sage-050:#E9EFE9;
+--clay:#BE5F3E;--clay-soft:#F3E2DA;--amber:#B8862F;--amber-soft:#F6EBD4;--rule:#DED7C6;
+--r:14px;--shadow:0 1px 2px rgba(38,48,42,.06),0 8px 24px -12px rgba(38,48,42,.18);}
+*{box-sizing:border-box}html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--ink);
+font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+font-size:16px;line-height:1.78;-webkit-font-smoothing:antialiased}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px 80px}
+h1,h2,h3,h4{font-family:"Noto Serif TC","Songti TC",serif;font-weight:700;line-height:1.45;margin:0}
+#gate{position:fixed;inset:0;background:var(--sage-900);z-index:99;display:flex;align-items:center;justify-content:center;padding:24px}
+#gate .box{max-width:330px;width:100%;text-align:center;color:#E7EDE6}
+#gate h2{font-size:20px;color:#FBF8EF;margin-bottom:6px}
+#gate p{font-size:13px;color:#A9BCAC;margin:0 0 22px;line-height:1.8}
+#gate input{width:100%;padding:14px;font-size:17px;text-align:center;letter-spacing:.3em;
+border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.07);color:#FBF8EF;border-radius:11px}
+#gate input:focus{outline:none;border-color:var(--sage-500)}
+#gate button{width:100%;margin-top:11px;padding:14px;border:0;border-radius:11px;background:var(--clay);
+color:#FFF8F4;font:inherit;font-size:16px;letter-spacing:.1em;cursor:pointer}
+#gate .err{color:#E9A88C;font-size:13px;margin-top:12px;min-height:20px}
+body.locked{overflow:hidden}
+.hero{background:var(--sage-900);color:#F2F0E6;padding:34px 0 28px}
+.hero .wrap{max-width:720px}
+.eyebrow{font-size:11.5px;letter-spacing:.26em;color:var(--sage-200);margin:0 0 11px}
+.hero h1{font-size:25px;color:#FBF8EF}
+.hero .sub{margin:12px 0 0;color:#C6D3C7;font-size:13.5px;line-height:1.9}
+section{margin-top:30px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.2em;color:var(--sage-700);
+border-bottom:1.5px solid var(--clay);padding-bottom:5px;margin-bottom:13px}
+h2{font-size:20px;margin-bottom:6px}
+.lede{color:var(--ink-soft);font-size:13.5px;margin:6px 0 16px;line-height:1.85}
+.card{background:var(--paper);border:1px solid var(--rule);border-radius:var(--r);
+padding:20px 22px;box-shadow:var(--shadow)}
+.fld{margin-bottom:14px}
+.fld:last-child{margin-bottom:0}
+.fld label{display:block;font-size:13px;color:var(--sage-700);margin-bottom:5px}
+.fld label small{color:#9AA49C}
+.fld input,.fld select{width:100%;padding:11px 13px;border:1px solid var(--rule);border-radius:10px;
+background:#fff;font:inherit;font-size:15px;color:var(--ink)}
+.fld input:focus,.fld select:focus{outline:none;border-color:var(--sage-500)}
+.row{display:grid;gap:14px}
+@media(min-width:620px){.row{grid-template-columns:1fr 1fr}}
+.btns{display:flex;gap:9px;flex-wrap:wrap;margin-top:16px}
+.sb{padding:11px 18px;border:1px solid var(--rule);border-radius:10px;background:#fff;
+font:inherit;font-size:14px;color:var(--sage-700);cursor:pointer;transition:all .15s;text-decoration:none;display:inline-block}
+.sb:hover{border-color:var(--sage-500)}
+.sb.main{background:var(--sage-900);border-color:var(--sage-900);color:#FBF8EF;font-weight:500}
+.out{margin-top:14px;width:100%;min-height:90px;padding:12px 14px;border:1px solid var(--rule);
+border-radius:10px;background:#FCFAF3;font:inherit;font-size:13px;line-height:1.9;color:var(--ink);
+resize:vertical;word-break:break-all}
+.note{border-radius:12px;padding:16px 18px;margin-top:16px;font-size:13px;line-height:1.9;
+background:var(--sage-050);border:1px solid var(--sage-200);color:var(--sage-700)}
+.note h4{font-size:14px;color:var(--sage-900);margin-bottom:8px;font-family:"Noto Serif TC",serif}
+.note strong{color:var(--sage-900)}
+.note p{margin:0 0 8px}.note p:last-child{margin-bottom:0}
+.note.warn{background:var(--amber-soft);border-color:#E5D3AA;color:#7A5B1B}
+.note.warn h4{color:#6B4F14}.note.warn strong{color:#5C440F}
+.saved{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:60;
+background:var(--sage-900);color:#F2F0E6;padding:9px 20px;border-radius:99px;font-size:13px;
+opacity:0;pointer-events:none;transition:opacity .25s}
+.saved.on{opacity:1}
+.foot{margin-top:24px;font-size:11.5px;color:#8B958E;line-height:1.9}
+</style></head><body>
+
+<div id="gate"><div class="box">
+<h2>通知頁產生器</h2>
+<p>顧問專用<br>請輸入密碼開啟。</p>
+<input type="password" id="pw" inputmode="numeric" placeholder="請輸入密碼" autocomplete="off">
+<button id="go">開　啟</button><div class="err" id="err"></div>
+</div></div>
+
+<header class="hero"><div class="wrap">
+<p class="eyebrow">財顧芸 ｜ 通知中心</p>
+<h1>通知頁產生器</h1>
+<p class="sub">填完按「產生連結」，把連結傳給客戶就好。<br>客戶資料只存在連結裡，不會留在這個網站上。</p>
+</div></header>
+
+<main class="wrap">
+
+<section>
+<span class="tag">繳費通知</span>
+<h2>填這幾欄就好</h2>
+<p class="lede">金額與期限必填，其餘可留空。</p>
+<div class="card">
+<div class="fld"><label>通知類別 <small>（決定頁面放在哪個子資料夾）</small></label>
+<select id="f_kind">
+<option value="fire/">住宅火險　fire/</option>
+<option value="">通用　（根目錄）</option>
+</select></div>
+<div class="row">
+<div class="fld"><label>應繳金額 <small>（只填數字）</small></label>
+<input id="f_a" inputmode="numeric" placeholder="1234"></div>
+<div class="fld"><label>繳費期限 <small>（西元年月日）</small></label>
+<input id="f_d" type="date"></div>
+</div>
+<div class="fld"><label>銷帳編號 <small>（可留空，留空會顯示「請見繳費單」）</small></label>
+<input id="f_n" inputmode="numeric" placeholder="12345678901234"></div>
+<div class="row">
+<div class="fld"><label>承保公司</label>
+<input id="f_c" value="國泰世紀產物保險"></div>
+<div class="fld"><label>標題</label>
+<input id="f_t" value="住宅火險　保費繳款通知"></div>
+</div>
+<div class="fld"><label>險種說明</label>
+<input id="f_p" value="住宅火災及地震基本保險　一年期"></div>
+<div class="fld"><label>網站網址 <small>（這個資料夾的網址，設定一次就好）</small></label>
+<input id="f_base" value="https://angie26501-lgtm.github.io/renewal/notice/"></div>
+
+<div class="btns">
+<button class="sb main" id="mk">產生連結</button>
+<button class="sb" id="cp">複製連結</button>
+<a class="sb" id="pv" href="#" target="_blank" rel="noopener">預覽</a>
+<button class="sb" id="msg">產生 LINE 訊息</button>
+</div>
+<textarea class="out" id="out" placeholder="按「產生連結」後，連結會出現在這裡。"></textarea>
+</div>
+
+<div class="note">
+<h4>為什麼資料不存在網站上</h4>
+<p>客戶的金額、銷帳編號、期限都寫在<strong>連結的網址裡</strong>，網站本身只有一個空白版型。</p>
+<p>所以就算網站是公開的，也沒有任何一位客戶的資料留在上面；<strong>連結只傳給本人</strong>，別人沒有連結就看不到。</p>
+</div>
+
+<div class="note warn">
+<h4>兩件事不要做</h4>
+<p><strong>不要把客戶的連結貼到公開地方</strong>（社群貼文、公開文件、公開的部落格）。連結本身就等於那份資料。</p>
+<p><strong>不要把含客戶姓名、身分證號、地址的頁面放上這個網站</strong>。這一頁刻意不收姓名與身分證號，就是為了這個。</p>
+</div>
+</section>
+
+<p class="foot">本產生器僅組出連結，不會上傳或儲存任何資料。實際應繳金額與期限以保險公司寄發之繳費單為準。</p>
+
+</main>
+
+<div class="saved" id="toast">已複製</div>
+
+<script>
+(function(){
+var K='0508058';
+var g=document.getElementById('gate'),i=document.getElementById('pw'),
+    b=document.getElementById('go'),e=document.getElementById('err'),toast=document.getElementById('toast');
+document.body.classList.add('locked');
+var RK='fireDocs.unlock',DAYS=15;
+function remember(){try{localStorage.setItem(RK,String(Date.now()+DAYS*864e5));}catch(x){}}
+function remembered(){try{return parseInt(localStorage.getItem(RK)||'0',10)>Date.now();}catch(x){return false;}}
+function unlock(){g.style.display='none';document.body.classList.remove('locked');load();}
+function t(){if(i.value.trim()===K){remember();unlock();}
+else{e.textContent='密碼不正確，請再試一次';i.value='';i.focus();}}
+b.addEventListener('click',t);
+i.addEventListener('keydown',function(v){if(v.key==='Enter')t();});
+i.focus();
+
+var tm=null;
+function flash(m){toast.textContent=m||'已複製';toast.classList.add('on');
+  clearTimeout(tm);tm=setTimeout(function(){toast.classList.remove('on');},1100);}
+
+var F=['f_a','f_d','f_n','f_c','f_t','f_p','f_base','f_kind'];
+function save(){try{var o={};F.forEach(function(k){o[k]=document.getElementById(k).value;});
+  localStorage.setItem('noticeGen',JSON.stringify(o));}catch(x){}}
+function load(){try{var r=localStorage.getItem('noticeGen');if(!r)return;var o=JSON.parse(r);
+  // 只還原公司／標題／險種／網址，金額與客戶資料每次重填
+  ['f_c','f_t','f_p','f_base','f_kind'].forEach(function(k){if(o[k])document.getElementById(k).value=o[k];});}catch(x){}}
+F.forEach(function(k){var el=document.getElementById(k);el.addEventListener('input',save);el.addEventListener('change',save);});
+
+document.getElementById('f_kind').addEventListener('change',function(){
+  var t=document.getElementById('f_t');
+  if(this.value==='fire/'&&(!t.value||t.value==='保費繳款通知'))t.value='住宅火險　保費繳款通知';
+  if(this.value===''&&t.value==='住宅火險　保費繳款通知')t.value='保費繳款通知';
+  save();});
+function val(k){return document.getElementById(k).value.trim();}
+function build(){
+  var base=val('f_base');
+  if(!base){base=location.href.replace(/[^/]*$/,'');}
+  if(base.slice(-1)!=='/')base+='/';
+  var p=[];
+  if(val('f_a'))p.push('a='+encodeURIComponent(val('f_a').replace(/[^\d]/g,'')));
+  if(val('f_n'))p.push('n='+encodeURIComponent(val('f_n').replace(/\s/g,'')));
+  if(val('f_d'))p.push('d='+encodeURIComponent(val('f_d')));
+  if(val('f_c'))p.push('c='+encodeURIComponent(val('f_c')));
+  if(val('f_t'))p.push('t='+encodeURIComponent(val('f_t')));
+  if(val('f_p'))p.push('p='+encodeURIComponent(val('f_p')));
+  var kind=document.getElementById('f_kind').value;
+  return base+kind+'pay.html'+(p.length?'?'+p.join('&'):'');
+}
+document.getElementById('mk').addEventListener('click',function(){
+  if(!val('f_a')){document.getElementById('out').value='（請先填應繳金額）';return;}
+  var u=build();
+  document.getElementById('out').value=u;
+  document.getElementById('pv').href=u;
+  flash('連結已產生');});
+document.getElementById('msg').addEventListener('click',function(){
+  if(!val('f_a')){document.getElementById('out').value='（請先填應繳金額）';return;}
+  var u=build(), a=parseInt(val('f_a').replace(/[^\d]/g,''),10).toLocaleString('en-US');
+  var d=val('f_d'), dtxt='';
+  if(d){var q=d.split('-');dtxt='（繳費期限 '+q[1]+'/'+q[2]+'）';}
+  var m='保單已經完成投保了，接下來只剩繳費這一步。\n\n'+
+        '應繳 '+a+' 元'+dtxt+'\n\n'+
+        '這個連結打開就有 QR Code，掃了直接線上繳，大約兩分鐘：\n'+u+'\n\n'+
+        '也可以拿繳費單去超商。完成之後，麻煩截圖傳給我，我幫您確認入帳 🙂';
+  document.getElementById('out').value=m;
+  document.getElementById('pv').href=u;
+  flash('訊息已產生');});
+document.getElementById('cp').addEventListener('click',function(){
+  var o=document.getElementById('out');if(!o.value){flash('請先產生連結');return;}
+  o.select();o.setSelectionRange(0,999999);
+  try{document.execCommand('copy');flash('已複製');}catch(x){flash('請手動複製');}});
+if(remembered()){unlock();}
+})();
+</script>
+</body></html>
